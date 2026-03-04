@@ -1,4 +1,5 @@
 import re
+from unittest import result
 
 def parse_receipt(text):
 
@@ -15,7 +16,7 @@ def parse_receipt(text):
         result["date"] = date_match.group()
 
     # Subtotal
-    subtotal_match = re.search(r'SUBTOTAL\s+([\d,]+\.\d{2})', text, re.IGNORECASE)
+    subtotal_match = re.search(r'SUBTOTAL.*?([\d,]+\.\d{2})', text)
     if subtotal_match:
         result["subtotal"] = float(subtotal_match.group(1).replace(",", ""))
 
@@ -24,9 +25,10 @@ def parse_receipt(text):
     if tax_match:
         result["tax"] = float(tax_match.group(1).replace(",", ""))
 
-    # Total
-    total_match = re.search(r'Total.*?([\d,]+\.\d{2})', text, re.IGNORECASE)
-    if total_match:
-        result["total"] = float(total_match.group(1).replace(",", ""))
+    # Total (find the largest money value)
+    money_values = re.findall(r'[\d,]+\.\d{2}', text)
+    if money_values:
+        numbers = [float(x.replace(",", "")) for x in money_values]
+        result["total"] = max(numbers)
 
     return result

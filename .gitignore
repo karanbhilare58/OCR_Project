@@ -3,4 +3,5 @@ __pycache__/
 *.pyc
 *.png
 *.jpg
+*.csv
 data/images/

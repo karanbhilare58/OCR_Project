@@ -9,6 +9,9 @@ from receipt_parser import parse_receipt
 
 input_folder = "data/receipts"
 
+# ensure results folder exists
+os.makedirs("results", exist_ok=True)
+
 results = []
 
 for filename in os.listdir(input_folder):
@@ -19,46 +22,75 @@ for filename in os.listdir(input_folder):
 
         img = cv2.imread(path)
 
-    if img is None:
-        print(f"Skipping {filename} (image not found or invalid)")
-        continue
+        if img is None:
+            print(f"Skipping {filename} (image not found or invalid)")
+            continue
 
-    img = cv2.resize(img, None, fx=1.5, fy=1.5) #disired size =none  
+        print("Processing:", filename)
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        img = cv2.resize(img, None, fx=1.5, fy=1.5)
 
-    _, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    ocr_data = pytesseract.image_to_data(thresh, output_type=Output.DICT)
+        _, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
 
-    words = ocr_data["text"]
-    confidences = ocr_data["conf"]
+        # OCR with detailed data
+        ocr_data = pytesseract.image_to_data(thresh, output_type=Output.DICT)
 
-    valid_conf = []
+        n_boxes = len(ocr_data['text'])
 
-    for conf in confidences:
-        if int(conf) > 0:
-            valid_conf.append(int(conf))
+        words = []
+        valid_conf = []
 
-    if valid_conf:
-        avg_conf = sum(valid_conf) / len(valid_conf)
-    else:
-        avg_conf = 0
+        for i in range(n_boxes):
 
-    raw_text = " ".join(words)
+            word = ocr_data['text'][i]
+            conf = float(ocr_data['conf'][i])
 
-    cleaned_text = clean_text(raw_text)
+            if word.strip() != "":
+                words.append(word)
 
-    data = parse_receipt(cleaned_text)
-    
-    data["raw_text"] = cleaned_text[:200]
-    data["confidence"] = round(avg_conf, 2)
+            if conf > 0:
+                valid_conf.append(conf)
 
-    data["file"] = filename
+            # draw bounding boxes for confident detections
+            if conf > 60:
 
-    results.append(data)
+                x = ocr_data['left'][i]
+                y = ocr_data['top'][i]
+                w = ocr_data['width'][i]
+                h = ocr_data['height'][i]
 
-    print("Processing:", filename)
+                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+                cv2.putText(
+                    img,
+                    word,
+                    (x, y - 5),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    (0, 255, 0),
+                    1
+                )
+
+        # save image with boxes
+        output_path = os.path.join("results", filename)
+        cv2.imwrite(output_path, img)
+
+        # calculate confidence
+        avg_conf = sum(valid_conf) / len(valid_conf) if valid_conf else 0
+
+        raw_text = " ".join(words)
+
+        cleaned_text = clean_text(raw_text)
+
+        data = parse_receipt(cleaned_text)
+
+        data["raw_text"] = cleaned_text[:200]
+        data["confidence"] = round(avg_conf, 2)
+        data["file"] = filename
+
+        results.append(data)
 
 df = pd.DataFrame(results)
 

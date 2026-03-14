@@ -1,8 +1,17 @@
 # 🧾 AI Receipt OCR System
 
+First AI/ML project demonstrating an end-to-end OCR pipeline for automated receipt data extraction.
 An end-to-end **Optical Character Recognition (OCR) pipeline** that extracts structured data from receipt images using **OpenCV, Tesseract OCR, and Flask**.
-
 The system preprocesses receipt images, detects text regions, extracts important information (Date, Subtotal, Tax, Total), calculates OCR confidence, and visualizes the entire processing pipeline through a web interface.
+
+## 🧠 Key Concepts Demonstrated
+
+• Image preprocessing using OpenCV (grayscale, thresholding)  
+• Optical Character Recognition using Tesseract  
+• Text region detection using bounding boxes  
+• Regex-based information extraction from OCR text  
+• Confidence scoring for OCR reliability  
+• End-to-end ML system deployment using Flask
 
 ---
 
@@ -183,3 +192,13 @@ The system also displays the OCR processing pipeline showing image preprocessing
 ✔ OCR confidence scoring  
 
 ---
+
+## 🚧 Future Improvements
+
+• Support for multiple receipt formats  
+• Improved text detection using deep learning models (EAST / CRAFT)  
+• Deployment using Docker  
+• API endpoint for receipt processing  
+• Improved receipt parsing using NLP models
+
+...

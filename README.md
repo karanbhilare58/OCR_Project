@@ -95,14 +95,33 @@ OCR_PROJECT2
 │   ├── original.png  
 │   ├── step_gray.png  
 │   ├── step_thresh.png  
-│   └── processed_receipt.png  
-│  
+│└── processed_receipt.png
+|
+├──screenshots
+|    ├── upload_page.png
+|   ├── image_preview.png
+|   ├── ocr_pipeline.png
+|   └── extracted_data.png 
+|
 ├── data  
 │   └── receipts          # Sample receipt images  
 │  
 └── results               # OCR output results  
 
 ---
+## 📸 Application Screenshots
+
+### Upload Interface
+![Upload Page](screenshots/upload_page.png)
+
+### Image Preview
+![Image Preview](screenshots/image_preview.png)
+
+### OCR Processing Pipeline
+![OCR Pipeline](screenshots/ocr_pipeline.png)
+
+### Extracted Receipt Data
+![Extracted Data](screenshots/extracted_data.png)
 
 ## ⚙️ Installation
 

@@ -12,7 +12,42 @@
 
 <div class="container mt-5">
 
-<h2 class="text-center mb-4">📊 Extracted Receipt Data</h2>
+<h2 class="text-center mb-4">AI Receipt OCR Analysis</h2>
+<p class="text-center text-muted">
+Automated extraction of receipt information using OCR and computer vision
+</p>
+
+<div class=""card shadow p-4 mb-4"></div>
+
+<h4 class="mt-5 text-center">OCR Processing Pipeline</h4>
+
+<div class="row text-center mt-4">
+
+<div class="col-md-3">
+<p>Original</p>
+<img src="{{ url_for('static', filename='original.png') }}" class="img-fluid border rounded">
+</div>
+
+<div class="col-md-3">
+<p>Grayscale</p>
+<img src="{{ url_for('static', filename='step_gray.png') }}" class="img-fluid border rounded">
+</div>
+
+<div class="col-md-3">
+<p>Threshold</p>
+<img src="{{ url_for('static', filename='step_thresh.png') }}" class="img-fluid border rounded">
+</div>
+
+<div class="col-md-3">
+<p>Detected Text Regions</p>
+<img src="{{ url_for('static', filename='processed_receipt.png') }}" class="img-fluid border rounded">
+<small class="text-muted">
+Green bounding boxes indicate regions where OCR detected text.
+</small>
+</div>
+
+</div>
+</div>
 
 <div class="card shadow p-4">
 
@@ -44,11 +79,11 @@
 <div class="progress">
 
 <div class="progress-bar bg-success"
-style="width: {{ data.confidence }}%">
-
-{{ data.confidence }}%
-
+style="width: {{ data.confidence|int }}%">
+{{ data.confidence|round(1) }}%
 </div>
+
+
 
 </div>
 
@@ -66,6 +101,13 @@ style="width: {{ data.confidence }}%">
 </div>
 
 </div>
+
+<footer class="text-center mt-5 p-3 text-muted">
+
+AI Receipt OCR System © 2026  
+Built with Python • OpenCV • Tesseract • Flask
+
+</footer>
 
 </body>
 </html>

@@ -21,6 +21,7 @@ def upload():
 
     filepath = "temp_receipt.png"
     file.save(filepath)
+    cv2.imwrite("static/original.png", cv2.imread(filepath))
 
     img = cv2.imread(filepath)
 
@@ -28,7 +29,11 @@ def upload():
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    _, thresh = cv2.threshold(gray,150,255,cv2.THRESH_BINARY)
+    cv2.imwrite("static/step_gray.png", gray)
+
+    _, thresh = cv2.threshold(gray,150,255,cv2.THRESH_BINARY,cv2.ADAPTIVE_THRESH_GAUSSIAN_C)
+
+    cv2.imwrite("static/step_thresh.png", thresh)
 
     ocr_data = pytesseract.image_to_data(thresh, output_type=Output.DICT)
 
@@ -67,6 +72,10 @@ def upload():
 
             cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0),2)
 
+    output_image = "static/processed_receipt.png"
+
+    cv2.imwrite(output_image, img)
+
     words = ocr_data["text"]
 
     raw_text = " ".join(words)
@@ -81,8 +90,14 @@ def upload():
 
     cv2.imwrite(output_image, img)
 
-    return render_template("result.html", data=data, image=output_image)
-
+    return render_template(
+        "result.html",
+        data=data,
+        image=output_image,
+        original="static/original.png",
+        gray="static/step_gray.png",
+        thresh="static/step_thresh.png"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

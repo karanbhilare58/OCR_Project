@@ -1,0 +1,698 @@
+# AI Receipt OCR System — Full Line-by-Line Code Explanation
+
+This document explains the **entire code of the AI Receipt OCR System step by step**.
+The explanation includes:
+
+• What every line of code does
+• Why that line exists in the OCR pipeline
+• How each component contributes to the system
+
+The system has **three main Python modules**:
+
+1. `app.py` – Main Flask web application and OCR pipeline
+2. `text_cleaner.py` – Cleans OCR output text
+3. `receipt_parser.py` – Extracts structured data using regex
+
+---
+
+# 1. text_cleaner.py — Text Cleaning Module
+
+Source code: 
+
+```
+import re
+```
+
+This line imports the **regular expression library**.
+
+Regular expressions are used to search, match, and modify text patterns.
+
+OCR outputs text that often contains:
+
+* random spaces
+* misread characters
+* formatting issues
+
+The `re` module helps clean that text.
+
+---
+
+```
+def clean_text(text):
+```
+
+This defines a **function named clean_text**.
+
+The purpose of this function is to **clean the raw OCR text before parsing it**.
+
+The function receives:
+
+text → OCR output string
+
+Example OCR output:
+
+```
+PHOT0 CAMERA 07/09/20 SUBT0TAL 3899.00
+```
+
+---
+
+```
+text = text.upper()
+```
+
+This converts the entire OCR text to **uppercase**.
+
+Why?
+
+OCR may produce mixed casing like:
+
+```
+Subtotal
+SUBTOTAL
+subTotal
+```
+
+Converting everything to uppercase ensures **consistent pattern matching** when using regex later.
+
+---
+
+```
+text = re.sub(r'\s+', ' ', text)
+```
+
+This removes **extra spaces** from the text.
+
+Explanation:
+
+`r'\s+'` means:
+
+match one or more whitespace characters
+
+Examples:
+
+```
+"TOTAL     4240"
+```
+
+becomes
+
+```
+"TOTAL 4240"
+```
+
+This improves readability and makes regex extraction easier.
+
+---
+
+```
+text = text.replace("PHOT0", "PHOTO")
+```
+
+OCR sometimes misreads **letters as numbers**.
+
+Example:
+
+```
+PHOTO → PHOT0
+```
+
+This line fixes that mistake.
+
+---
+
+```
+text = text.replace("CANERA", "CAMERA")
+```
+
+OCR may misread characters like:
+
+```
+CAMERA → CANERA
+```
+
+This correction improves text accuracy.
+
+---
+
+```
+text = text.replace("SUBT0TAL", "SUBTOTAL")
+```
+
+Another OCR mistake correction.
+
+Example:
+
+```
+SUBTOTAL → SUBT0TAL
+```
+
+Replacing these improves regex matching later.
+
+---
+
+```
+return text
+```
+
+Finally, the cleaned text is returned to the main program.
+
+Example output:
+
+```
+PHOTO CAMERA 07/09/20 SUBTOTAL 3899.00 TAX 341.16 TOTAL 4240.16
+```
+
+---
+
+# 2. receipt_parser.py — Data Extraction Module
+
+Source code: 
+
+This module converts **unstructured OCR text into structured data**.
+
+Example:
+
+Input OCR text:
+
+```
+DATE 07/09/20 SUBTOTAL 3899.00 TAX 341.16 TOTAL 4240.16
+```
+
+Output structured data:
+
+```
+{
+ date: 07/09/20
+ subtotal: 3899.00
+ tax: 341.16
+ total: 4240.16
+}
+```
+
+---
+
+```
+import re
+```
+
+Imports the regular expression module.
+
+Used to detect patterns like:
+
+* dates
+* currency values
+* numbers
+
+---
+
+```
+from unittest import result
+```
+
+This import is **not required** and can be removed.
+
+The program later creates its own variable called `result`.
+
+---
+
+```
+def parse_receipt(text):
+```
+
+Defines a function that receives the **cleaned OCR text**.
+
+Example input:
+
+```
+SUBTOTAL 3899.00 TAX 341.16 TOTAL 4240.16
+```
+
+---
+
+```
+result = {}
+```
+
+Creates an **empty dictionary**.
+
+This dictionary will store extracted data fields.
+
+Example final result:
+
+```
+{
+ "date": "07/09/20",
+ "subtotal": 3899.00,
+ "tax": 341.16,
+ "total": 4240.16
+}
+```
+
+---
+
+```
+order_match = re.search(r'Order[:\s]+(\d+)', text, re.IGNORECASE)
+```
+
+This searches for the **order number** pattern.
+
+Regex explanation:
+
+```
+Order
+```
+
+matches the word "Order"
+
+```
+[:\s]+
+```
+
+matches colon or spaces
+
+```
+(\d+)
+```
+
+captures numbers
+
+Example match:
+
+```
+Order: 12345
+```
+
+Captured value → 12345
+
+---
+
+```
+if order_match:
+    result["order_number"] = order_match.group(1)
+```
+
+If the order number exists, it is added to the dictionary.
+
+---
+
+```
+date_match = re.search(r'\d{2}/\d{2}/\d{2}', text)
+```
+
+Searches for a **date pattern**.
+
+Regex explanation:
+
+```
+\d{2} → two digits
+/
+\d{2} → two digits
+/
+\d{2} → two digits
+```
+
+Example match:
+
+```
+07/09/20
+```
+
+---
+
+```
+if date_match:
+    result["date"] = date_match.group()
+```
+
+Stores the detected date.
+
+---
+
+```
+subtotal_match = re.search(r'SUBTOTAL.*?([\d,]+\.\d{2})', text)
+```
+
+Extracts the **subtotal value**.
+
+Regex explanation:
+
+```
+SUBTOTAL
+```
+
+Finds the keyword.
+
+```
+.*?
+```
+
+Matches any characters until the number appears.
+
+```
+([\d,]+\.\d{2})
+```
+
+Captures currency value.
+
+Example:
+
+```
+SUBTOTAL 3899.00
+```
+
+---
+
+```
+result["subtotal"] = float(subtotal_match.group(1).replace(",", ""))
+```
+
+Extracted value is converted into a **float number**.
+
+Example:
+
+```
+"3,899.00"
+```
+
+becomes
+
+```
+3899.00
+```
+
+---
+
+```
+tax_match = re.search(r'Tax[:\s]+([\d,]+\.\d{2})', text, re.IGNORECASE)
+```
+
+Extracts **tax value**.
+
+Example match:
+
+```
+Tax: 341.16
+```
+
+---
+
+```
+money_values = re.findall(r'[\d,]+\.\d{2}', text)
+```
+
+Finds **all money values in the text**.
+
+Example:
+
+```
+3899.00
+341.16
+4240.16
+```
+
+---
+
+```
+numbers = [float(x.replace(",", "")) for x in money_values]
+```
+
+Converts them to numeric values.
+
+---
+
+```
+result["total"] = max(numbers)
+```
+
+The largest value is assumed to be the **total amount**.
+
+---
+
+```
+return result
+```
+
+Returns the structured data dictionary.
+
+---
+
+# 3. app.py — Main OCR Pipeline
+
+Source code: 
+
+This is the **main application file**.
+
+It handles:
+
+* image upload
+* preprocessing
+* OCR processing
+* text extraction
+* web interface
+
+---
+
+```
+from flask import Flask, request, render_template
+```
+
+Imports Flask components.
+
+Flask → web framework
+request → handles uploaded files
+render_template → displays HTML pages
+
+---
+
+```
+import cv2
+```
+
+Imports **OpenCV**, used for image processing.
+
+---
+
+```
+import pytesseract
+```
+
+Imports the Python wrapper for **Tesseract OCR**.
+
+---
+
+```
+from pytesseract import Output
+```
+
+Allows OCR results to be returned as structured dictionaries.
+
+---
+
+```
+from text_cleaner import clean_text
+```
+
+Imports the text cleaning function.
+
+---
+
+```
+from receipt_parser import parse_receipt
+```
+
+Imports the receipt parsing function.
+
+---
+
+```
+app = Flask(__name__)
+```
+
+Creates the Flask web application.
+
+---
+
+```
+@app.route('/')
+```
+
+Defines the **home page route**.
+
+---
+
+```
+def home():
+    return render_template("index.html")
+```
+
+Displays the **upload page**.
+
+---
+
+```
+@app.route('/upload', methods=['POST'])
+```
+
+Handles **image upload requests**.
+
+---
+
+```
+file = request.files['image']
+```
+
+Retrieves the uploaded image file.
+
+---
+
+```
+filepath = "temp_receipt.png"
+file.save(filepath)
+```
+
+Saves the uploaded file locally.
+
+---
+
+```
+img = cv2.imread(filepath)
+```
+
+Loads the image using OpenCV.
+
+---
+
+```
+img = cv2.resize(img, None, fx=1.5, fy=1.5)
+```
+
+Resizes the image.
+
+Why?
+
+Increasing image resolution often improves OCR accuracy.
+
+---
+
+```
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+```
+
+Converts the image to **grayscale**.
+
+Removes color information.
+
+---
+
+```
+_, thresh = cv2.threshold(gray,150,255,cv2.THRESH_BINARY)
+```
+
+Applies **thresholding**.
+
+Creates a binary image.
+
+---
+
+```
+ocr_data = pytesseract.image_to_data(thresh, output_type=Output.DICT)
+```
+
+Runs OCR and returns detailed results.
+
+Output includes:
+
+text
+bounding boxes
+confidence scores
+
+---
+
+```
+confidences = ocr_data["conf"]
+```
+
+Extracts confidence values.
+
+---
+
+```
+avg_conf = sum(valid_conf) / len(valid_conf)
+```
+
+Computes **average OCR confidence**.
+
+---
+
+```
+for i in range(n_boxes):
+```
+
+Iterates through detected text regions.
+
+---
+
+```
+cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0),2)
+```
+
+Draws **bounding boxes around detected text**.
+
+---
+
+```
+raw_text = " ".join(words)
+```
+
+Combines OCR words into a full sentence.
+
+---
+
+```
+cleaned_text = clean_text(raw_text)
+```
+
+Cleans OCR errors.
+
+---
+
+```
+data = parse_receipt(cleaned_text)
+```
+
+Extracts structured data fields.
+
+---
+
+```
+return render_template("result.html", data=data)
+```
+
+Displays the results in the web interface.
+
+---
+
+# Final Summary
+
+This project demonstrates an **end-to-end OCR pipeline**:
+
+Image Upload
+↓
+Image Preprocessing
+↓
+Text Detection
+↓
+OCR Recognition
+↓
+Text Cleaning
+↓
+Regex Data Extraction
+↓
+Structured Data Output
+
+It integrates **computer vision, OCR, text processing, and web deployment** into a single system.
+
+---
+
+End of Detailed Code Explanation

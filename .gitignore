@@ -1,5 +1,6 @@
-venv/
 __pycache__/
 *.pyc
+venv/
+paddle_env/
+logs/
 *.csv
-data/images/

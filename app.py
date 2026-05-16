@@ -1,36 +1,64 @@
 from flask import Flask, request, render_template
 
-from services.ocr_service import process_receipt
 from services.ai_ocr_service import process_receipt_easyocr
+
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def home():
+
     return render_template("index.html")
 
 
 @app.route('/upload', methods=['POST'])
 def upload():
 
-    file = request.files['image']
+    try:
 
-    filepath = "temp_receipt.png"
+        file = request.files['image']
 
-    file.save(filepath)
+        filepath = "temp_receipt.png"
 
-    data, output_image = process_receipt_easyocr(filepath)
+        file.save(filepath)
 
-    return render_template(
-        "result.html",
-        data=data,
-        image=output_image,
-        original="static/original.png",
-        gray="static/step_gray.png",
-        thresh="static/step_thresh.png"
-    )
+        result = process_receipt_easyocr(filepath)
+
+        if not result["success"]:
+
+            return render_template(
+                "result.html",
+                error=result["error"]
+            )
+
+        return render_template(
+
+            "result.html",
+
+            data=result["fields"],
+
+            confidence=result["ocr"]["confidence"],
+
+            processing_time=result["metadata"]["processing_time"],
+
+            image=result["images"]["processed"],
+
+            original=result["images"]["original"],
+
+            gray=result["images"]["gray"],
+
+            thresh=result["images"]["threshold"]
+        )
+
+    except Exception as e:
+
+        return render_template(
+            "result.html",
+            error=str(e)
+        )
 
 
 if __name__ == "__main__":
+
     app.run(debug=True)

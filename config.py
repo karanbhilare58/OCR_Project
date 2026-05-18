@@ -21,6 +21,9 @@ class Config:
         "jpg",
         "jpeg"
     }
+    SQLALCHEMY_DATABASE_URI = "sqlite:///receipts.db"
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     OCR_LANGUAGES = ['en']
 

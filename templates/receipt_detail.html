@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Receipt Detail</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body style="background:#f5f7fb">
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">
+        Receipt Detail
+    </h2>
+
+    <div class="card shadow p-4 mb-4">
+
+        <h4 class="mb-3">
+            Receipt Information
+        </h4>
+
+        <table class="table">
+
+            <tr>
+                <th>ID</th>
+                <td>{{ receipt.id }}</td>
+            </tr>
+
+            <tr>
+                <th>Filename</th>
+                <td>{{ receipt.filename }}</td>
+            </tr>
+
+            <tr>
+                <th>Date</th>
+                <td>{{ receipt.date }}</td>
+            </tr>
+
+            <tr>
+                <th>Subtotal</th>
+                <td>{{ receipt.subtotal }}</td>
+            </tr>
+
+            <tr>
+                <th>Tax</th>
+                <td>{{ receipt.tax }}</td>
+            </tr>
+
+            <tr>
+                <th>Total</th>
+                <td><b>{{ receipt.total }}</b></td>
+            </tr>
+
+            <tr>
+                <th>Confidence</th>
+                <td>{{ receipt.confidence }}%</td>
+            </tr>
+
+            <tr>
+                <th>Processing Time</th>
+                <td>{{ receipt.processing_time }} sec</td>
+            </tr>
+
+            <tr>
+                <th>OCR Engine</th>
+                <td>{{ receipt.ocr_engine }}</td>
+            </tr>
+
+            <tr>
+                <th>Created At</th>
+                <td>{{ receipt.created_at }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="card shadow p-4 mb-4">
+
+        <h4 class="mb-3">
+            Raw OCR Text
+        </h4>
+
+        <div class="bg-light p-3 rounded">
+
+            <pre style="white-space: pre-wrap;">{{ receipt.raw_text }}</pre>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow p-4 mb-4">
+
+        <h4 class="mb-3">
+            OCR Pipeline Images
+        </h4>
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <p>Original</p>
+
+                <img src="{{ url_for('static', filename='original.png') }}"
+                     class="img-fluid border rounded">
+
+            </div>
+
+            <div class="col-md-3">
+
+                <p>Grayscale</p>
+
+                <img src="{{ url_for('static', filename='step_gray.png') }}"
+                     class="img-fluid border rounded">
+
+            </div>
+
+            <div class="col-md-3">
+
+                <p>Threshold</p>
+
+                <img src="{{ url_for('static', filename='step_thresh.png') }}"
+                     class="img-fluid border rounded">
+
+            </div>
+
+            <div class="col-md-3">
+
+                <p>Detected Text</p>
+
+                <img src="{{ url_for('static', filename='processed_receipt.png') }}"
+                     class="img-fluid border rounded">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="text-center mb-5">
+
+        <a href="/receipts"
+           class="btn btn-dark">
+
+           Back to History
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

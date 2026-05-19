@@ -1,4 +1,5 @@
 from database import db
+from datetime import datetime
 
 
 class Receipt(db.Model):
@@ -6,6 +7,10 @@ class Receipt(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True
+    )
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
     )
 
     filename = db.Column(

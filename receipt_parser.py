@@ -1,34 +1,56 @@
 import re
-from unittest import result
+
+from services.nlp_service import extract_entities
+
+
+def extract_amount(keyword, text):
+
+    pattern = rf"{keyword}\s*[:\-]?\s*\$?([0-9,]+\.\d{{2}})"
+
+    match = re.search(
+        pattern,
+        text,
+        re.IGNORECASE
+    )
+
+    if match:
+        return match.group(1)
+
+    return None
+
 
 def parse_receipt(text):
 
-    result = {}
+    entities = extract_entities(text)
 
-    # Order number
-    order_match = re.search(r'Order[:\s]+(\d+)', text, re.IGNORECASE)
-    if order_match:
-        result["order_number"] = order_match.group(1)
+    subtotal = extract_amount("subtotal", text)
 
-    # Date
-    date_match = re.search(r'\d{2}/\d{2}/\d{2}', text)
-    if date_match:
-        result["date"] = date_match.group()
+    tax = extract_amount("tax", text)
 
-    # Subtotal
-    subtotal_match = re.search(r'SUBTOTAL.*?([\d,]+\.\d{2})', text)
-    if subtotal_match:
-        result["subtotal"] = float(subtotal_match.group(1).replace(",", ""))
+    total = extract_amount("total", text)
 
-    # Tax
-    tax_match = re.search(r'Tax[:\s]+([\d,]+\.\d{2})', text, re.IGNORECASE)
-    if tax_match:
-        result["tax"] = float(tax_match.group(1).replace(",", ""))
+    date_match = re.search(
+        r"\d{2}/\d{2}/\d{2,4}",
+        text
+    )
 
-    # Total (find the largest money value)
-    money_values = re.findall(r'[\d,]+\.\d{2}', text)
-    if money_values:
-        numbers = [float(x.replace(",", "")) for x in money_values]
-        result["total"] = max(numbers)
+    date = date_match.group(0) if date_match else None
 
-    return result
+    money_entities = entities["money"]
+
+    if not total and money_entities:
+
+        total = money_entities[-1]
+
+    return {
+
+        "date": date,
+
+        "subtotal": subtotal,
+
+        "tax": tax,
+
+        "total": total,
+
+        "money_entities": money_entities
+    }

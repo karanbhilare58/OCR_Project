@@ -1,0 +1,17 @@
+{
+    "receipt1.png": {
+        "date": "07/09/20",
+        "subtotal": "3899.00",
+        "tax": "341.16",
+        "total": "4240.16"
+    },
+
+    "receipt2.png": {
+        "date": "03/07/2017",
+        "total": "5119.88"
+    },
+
+    "receipt3.png": {
+        "total": "574.09"
+    }
+}

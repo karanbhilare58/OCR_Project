@@ -1,7 +1,7 @@
 import easyocr
 import cv2
 
-from text_cleaner import clean_text
+from text_cleaner import clean_text, normalize_ocr_text
 from receipt_parser import parse_receipt
 
 import logging
@@ -90,6 +90,10 @@ def process_receipt_easyocr(filepath):
         raw_text = " ".join(detected_text)
 
         cleaned_text = clean_text(raw_text)
+
+        from text_cleaner import normalize_ocr_text
+
+        cleaned_text = normalize_ocr_text(cleaned_text)
 
         data = parse_receipt(cleaned_text)
 

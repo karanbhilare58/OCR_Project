@@ -1,5 +1,26 @@
 import re
 
+
+
+import re
+
+
+def normalize_ocr_text(text):
+
+    text = re.sub(
+        r'TOTA[\]\|]',
+        'TOTAL',
+        text
+    )
+
+    text = re.sub(
+        r'(\d+),(\d{2})(?!\d)',
+        r'\1.\2',
+        text
+    )
+
+    return text
+
 def clean_text(text):
 
     text = text.upper()

@@ -2,10 +2,17 @@ import re
 
 from services.nlp_service import extract_entities
 
+def normalize_amount(value):
+
+    if value is None:
+        return None
+
+    return value.replace(",", "").strip()
+
 
 def extract_amount(keyword, text):
 
-    pattern = rf"{keyword}\s*[:\-]?\s*\$?([0-9,]+\.\d{{2}})"
+    pattern = rf"{keyword}.*?\$?([0-9,]+\.\d{{2}})"
 
     match = re.search(
         pattern,
@@ -27,7 +34,21 @@ def parse_receipt(text):
 
     tax = extract_amount("tax", text)
 
-    total = extract_amount("total", text)
+    total_patterns = [
+
+    r"total\s*payment",
+    r"total\s*order",
+    r"\btotal\b"
+]
+
+    total = None
+
+    for pattern in total_patterns:
+
+        total = extract_amount(pattern, text)
+
+        if total:
+            break
 
     date_match = re.search(
         r"\d{2}/\d{2}/\d{2,4}",
@@ -41,6 +62,12 @@ def parse_receipt(text):
     if not total and money_entities:
 
         total = money_entities[-1]
+
+    subtotal = normalize_amount(subtotal)
+
+    tax = normalize_amount(tax)
+
+    total = normalize_amount(total)
 
     return {
 

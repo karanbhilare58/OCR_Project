@@ -1,8 +1,8 @@
-from flask import Flask, request, render_template
 from database import db
 from models import Receipt
 from config import Config
 import os
+from flask import Flask, render_template, request, jsonify
 
 from services.ai_ocr_service import process_receipt_easyocr
 
@@ -10,8 +10,15 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+def allowed_file(filename):
+
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 # --- Routes ---
+
 
 @app.route('/')
 def home():
@@ -86,7 +93,44 @@ def upload():
 
     except Exception as e:
         return render_template("result.html", error=str(e))
+    
+@app.route('/api/process_receipt', methods=['POST'])
+def api_process_receipt():
 
+    if 'receipt' not in request.files:
+
+        return jsonify({
+
+            "success": False,
+            "error": "No receipt image uploaded"
+
+        }), 400
+
+    file = request.files['receipt']
+
+    if file.filename == '':
+
+        return jsonify({
+
+            "success": False,
+            "error": "Empty filename"
+
+        }), 400
+
+    filepath = os.path.join(
+        app.config['UPLOAD_FOLDER'],
+        file.filename
+    )
+    if not allowed_file(file.filename):
+        return jsonify({
+            "success": False,
+            "error": "Invalid file type"
+        }), 400
+    file.save(filepath)
+
+    result = process_receipt_easyocr(filepath)
+
+    return jsonify(result)
 
 if __name__ == "__main__":
     with app.app_context():

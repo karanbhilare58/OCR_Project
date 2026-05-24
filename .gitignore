@@ -5,3 +5,4 @@ paddle_env/
 logs/
 *.csv
 instance/
+static/uploads/

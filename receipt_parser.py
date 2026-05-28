@@ -25,6 +25,37 @@ def extract_amount(keyword, text):
 
     return None
 
+def extract_total_smart(text):
+
+    matches = re.findall(
+        r'([0-9,]+\.\d{2})',
+        text
+    )
+
+    if not matches:
+        return None
+
+    amounts = []
+
+    for value in matches:
+
+        try:
+            cleaned = float(
+                value.replace(",", "")
+            )
+
+            amounts.append((cleaned, value))
+
+        except:
+            continue
+
+    if not amounts:
+        return None
+
+    amounts.sort(reverse=True)
+
+    return amounts[0][1]
+
 
 def parse_receipt(text):
 
@@ -59,9 +90,8 @@ def parse_receipt(text):
 
     money_entities = entities["money"]
 
-    if not total and money_entities:
-
-        total = money_entities[-1]
+    if not total:
+        total = extract_total_smart(text)
 
     subtotal = normalize_amount(subtotal)
 

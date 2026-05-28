@@ -8,6 +8,10 @@ from flask import Flask, render_template, request, jsonify
 from flasgger import Swagger
 
 from services.ai_ocr_service import process_receipt_easyocr
+from services.receipt_service import (
+    process_receipt_file,
+    save_receipt_to_db
+)
 
 
 app = Flask(__name__)
@@ -44,42 +48,6 @@ def allowed_file(filename):
 
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-# =========================
-# Shared File Processing
-# =========================
-
-def process_uploaded_file(file):
-
-    if file.filename == '':
-
-        return {
-            "success": False,
-            "error": "Empty filename"
-        }, 400
-
-    if not allowed_file(file.filename):
-
-        return {
-            "success": False,
-            "error": "Invalid file type"
-        }, 400
-
-    filepath = os.path.join(
-        app.config['UPLOAD_FOLDER'],
-        file.filename
-    )
-
-    file.save(filepath)
-
-    result = process_receipt_easyocr(filepath)
-
-    # Cleanup uploaded file
-    if os.path.exists(filepath):
-        os.remove(filepath)
-
-    return result, 200
 
 
 # =========================
@@ -142,7 +110,10 @@ def upload():
 
         file = request.files['image']
 
-        result, status_code = process_uploaded_file(file)
+        result, status_code = process_receipt_file(
+    file,
+    app.config['UPLOAD_FOLDER']
+)
 
         if not result["success"]:
 
@@ -151,31 +122,10 @@ def upload():
                 error=result["error"]
             )
 
-        # Save Receipt to Database
-        receipt = Receipt(
-
-            filename=file.filename,
-
-            date=result["fields"]["date"],
-
-            subtotal=result["fields"]["subtotal"],
-
-            tax=result["fields"]["tax"],
-
-            total=result["fields"]["total"],
-
-            confidence=result["ocr"]["confidence"],
-
-            processing_time=result["metadata"]["processing_time"],
-
-            raw_text=result["ocr"]["raw_text"],
-
-            ocr_engine=result["metadata"]["ocr_engine"]
-        )
-
-        db.session.add(receipt)
-
-        db.session.commit()
+        save_receipt_to_db(
+    file.filename,
+    result
+)
 
         return render_template(
 
@@ -251,7 +201,10 @@ def api_process_receipt():
 
         file = request.files['receipt']
 
-        result, status_code = process_uploaded_file(file)
+        result, status_code = process_receipt_file(
+    file,
+    app.config['UPLOAD_FOLDER']
+)
 
         return jsonify(result), status_code
 

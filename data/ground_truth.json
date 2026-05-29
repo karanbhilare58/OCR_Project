@@ -13,5 +13,104 @@
 
     "receipt3.png": {
         "total": "574.09"
+    },
+
+
+    "receipt4.png" : {
+        "date": "2026-05-09",
+        "subtotal": "2315.37",
+        "tax": "205.49",
+        "total": "2520.86"
+    },
+
+    "receipt5.png": {
+        "date": "2026-05-08",
+        "subtotal": "3716.80",
+        "tax": "0.00",
+        "total": "3716.80"
+    },
+
+    "receipt6.png": {
+        "date": "2026-05-01",
+        "subtotal": "17124.30",
+        "tax": "2671.39",
+        "total": "19795.69"
+    },
+
+    "receipt7.png": {
+        "date": "2026-05-09",
+        "subtotal": "49846.50",
+        "tax": "6230.81",
+        "total": "56077.31"
+    },
+
+    "receipt8.png": {
+        "date": "2026-05-15",
+        "subtotal": "7140.70",
+        "tax": "446.29",
+        "total": "7586.99"
+    },
+
+    "receipt9.png": {
+        "date": "2026-05-18",
+        "subtotal": "5031.40",
+        "tax": "319.49",
+        "total": "5350.89"
+    },
+
+    "receipt10.png": {
+        "date": "2026-05-21",
+        "subtotal": "27092.65",
+        "tax": "2404.47",
+        "total": "29497.12"
+    },
+
+    "receipt11.png": {
+        "date": "2026-05-04",
+        "subtotal": "43451.85",
+        "tax": "4019.30",
+        "total": "47471.15"
+    },
+
+    "receipt12.png": {
+        "date": "2026-05-01",
+        "subtotal": "4076.45",
+        "tax": "285.35",
+        "total": "4361.80"
+    },
+
+    "receipt13.png": {
+        "date": "2026-05-04",
+        "subtotal": "6197.20",
+        "tax": "387.32",
+        "total": "6584.52"
+    },
+
+    "receipt14.png": {
+        "date": "2026-05-09",
+        "subtotal": "5962.50",
+        "tax": "514.27",
+        "total": "6476.77"
+    },
+
+    "receipt15.png": {
+        "date": "2026-05-11",
+        "subtotal": "6916.50",
+        "tax": "570.61",
+        "total": "7487.11"
+    },
+
+    "receipt16.png": {
+        "date": "2026-05-15",
+        "subtotal": "3459.22",
+        "tax": "328.63",
+        "total": "3787.85"
+    },
+
+    "receipt17.png": {
+        "date": "2026-05-09",
+        "subtotal": "3072.85",
+        "tax": "253.51",
+        "total": "3326.36"
     }
 }

@@ -6,7 +6,7 @@ from services.ai_ocr_service import process_receipt_easyocr
 
 GROUND_TRUTH_PATH = "data/ground_truth.json"
 
-RECEIPT_FOLDER = "data/receipts"
+RECEIPT_FOLDER = "data/receipts_test"
 
 
 with open(GROUND_TRUTH_PATH, "r") as file:
@@ -28,7 +28,7 @@ for filename, expected in ground_truth.items():
 
     result = process_receipt_easyocr(filepath)
 
-    extracted = result["fields"]
+    extracted = result.get("fields", result)
 
     for field, expected_value in expected.items():
 

@@ -10,6 +10,12 @@ from receipt_parser import parse_receipt
 import logging
 import time
 
+import os
+
+os.makedirs(
+    "logs",
+    exist_ok=True
+)
 
 logging.basicConfig(
     filename='logs/app.log',

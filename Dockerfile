@@ -10,6 +10,8 @@ RUN python -m spacy download en_core_web_sm
 
 COPY . .
 
+RUN mkdir -p logs static instance
+
 EXPOSE 5000
 
 CMD ["python", "app.py"]

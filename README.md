@@ -7,6 +7,7 @@ An end-to-end AI-powered Receipt OCR System that extracts structured financial i
 ![EasyOCR](https://img.shields.io/badge/EasyOCR-OCR-orange)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
 ![Accuracy](https://img.shields.io/badge/Accuracy-96.83%25-success)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
 ## Overview
 
@@ -51,6 +52,16 @@ data/ground_truth.json
 | Batch Processing | Yes |
 | Dockerized | Yes |
 
+## Performance Summary
+
+- OCR Engine: EasyOCR
+- Dataset Size: 17 receipts
+- Total Fields Evaluated: 63
+- Correct Fields Extracted: 61
+- Overall Accuracy: 96.83%
+- Date Accuracy: 100%
+- Tax Accuracy: 100%
+
 ## Features
 
 * EasyOCR-powered text extraction
@@ -88,6 +99,10 @@ data/ground_truth.json
 ### Deployment
 
 * Docker
+
+## Why EasyOCR?
+
+The project originally used Tesseract OCR. During benchmarking, EasyOCR produced better recognition accuracy on noisy and low-quality receipt images, resulting in higher field extraction performance. The OCR pipeline was therefore upgraded to EasyOCR.
 
 ## System Architecture
 
@@ -142,45 +157,48 @@ OCR_Project/
 
 ## Sample API Response
 
-json
+```json
 {
   "date": "2026-05-09",
   "subtotal": "2315.37",
   "tax": "205.49",
   "total": "2520.86"
 }
+```
 
 ## API Endpoints
 
 ### Process Single Receipt
 
-POST
+```POST
 
 /api/process_receipt
 
 Accepts a receipt image and returns extracted fields.
+```
 
 ### Batch Receipt Processing
 
-POST
+```POST
 
 /api/process_batch
 
 Accepts multiple receipt images and processes them together.
-
+```
 ### Swagger Documentation
 
-/apidocs
+```/apidocs
 
 Interactive API documentation generated using Flasgger.
-
+```
 ## Evaluation Results
 
 Benchmark Dataset:
-
+```
 * 17 receipt images
 * Multiple receipt formats
 * Realistic OCR noise
+```
 
 ### Field Accuracy
 
@@ -192,13 +210,13 @@ Benchmark Dataset:
 | Total    | 94.12%   |
 
 ### Overall Accuracy
-
+```
 96.83%
 
 61 Correct Fields / 63 Total Fields
-
+```
 ### Evaluation Reporting
-
+```
 The project automatically generates:
 
 evaluation_report.csv
@@ -210,7 +228,7 @@ containing:
 * Expected Value
 * Extracted Value
 * Pass/Fail Status
-
+```
 ## Screenshots
 
 ### Home Page
@@ -239,50 +257,55 @@ containing:
 
 ### Clone Repository
 
-git clone YOUR_GITHUB_LINK
-
+```bash
+git clone https://github.com/karanbhilare58/OCR_Project.git
 cd OCR_Project
+```
 
 ### Create Virtual Environment
 
+```bash
 python -m venv venv
-
 source venv/bin/activate
+```
 
 ### Install Dependencies
 
+```bash
 pip install -r requirements-docker.txt
+```
 
 ### Run Application
 
+```bash
 python app.py
+```
 
 Application:
-
+```
 http://localhost:5000
-
+```
 Swagger:
-
+```
 http://localhost:5000/apidocs
-
+```
 ## Docker
 
 ### Build Image
-
+```bash
 docker build -t receipt-ocr .
+```
 
 ### Run Container
-
+```bash
 docker run -p 5000:5000 receipt-ocr
+```
 
-## Challenges Solved
+### Run Evaluation
 
-* OCR text cleaning and normalization
-* Receipt format variability
-* Total amount extraction accuracy
-* Batch receipt processing
-* Evaluation and benchmarking
-* Docker containerization
+```bash
+python evaluate.py
+```
 
 ## Future Improvements
 
@@ -303,13 +326,14 @@ docker run -p 5000:5000 receipt-ocr
 
 ## Resume Highlights
 
-* Built an end-to-end OCR system using EasyOCR, OpenCV, Flask, and SQLite.
-* Developed REST APIs, batch processing, database persistence, and evaluation analytics.
-* Achieved 96.83% field extraction accuracy on a custom benchmark dataset.
-* Containerized the application using Docker for reproducible deployment.
+- Developed an end-to-end Receipt OCR pipeline using EasyOCR, OpenCV, Flask, spaCy, and SQLite.
+- Designed REST APIs, batch processing workflows, database persistence, and receipt history tracking.
+- Built a benchmark evaluation framework with automated CSV reporting and ground-truth validation.
+- Achieved 96.83% field extraction accuracy across 17 real-world receipt samples.
+- Containerized the application using Docker for reproducible deployment and environment consistency.
 
 ## Author
 
 Karan Bhilare
 
-GitHub: github.com/karanbhilare58/OCR_Project
+Repository: https://github.com/karanbhilare58/OCR_Project

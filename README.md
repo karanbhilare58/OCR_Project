@@ -2,6 +2,12 @@
 
 An end-to-end AI-powered Receipt OCR System that extracts structured financial information from receipt images using Computer Vision, OCR, NLP, and a Flask web application.
 
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Flask](https://img.shields.io/badge/Flask-Backend-green)
+![EasyOCR](https://img.shields.io/badge/EasyOCR-OCR-orange)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![Accuracy](https://img.shields.io/badge/Accuracy-96.83%25-success)
+
 ## Overview
 
 The system automatically processes receipt images and extracts key financial fields such as:
@@ -12,6 +18,38 @@ The system automatically processes receipt images and extracts key financial fie
 * Total Amount
 
 The application combines image preprocessing, OCR, text normalization, intelligent receipt parsing, database storage, REST APIs, and evaluation analytics into a production-style pipeline.
+
+## OCR Engine Evolution
+
+The project initially used Tesseract OCR and was later upgraded to EasyOCR to improve recognition quality on noisy receipt images and achieve higher extraction accuracy.
+
+## Dataset
+
+The evaluation dataset contains 17 receipt images across multiple business categories:
+
+- Grocery Stores
+- Restaurants
+- Hotels
+- Gas Stations
+- Retail Stores
+- Pharmacies
+
+Ground truth labels are stored in:
+
+data/ground_truth.json
+
+## Project Metrics
+
+| Metric | Value |
+|----------|----------|
+| OCR Engine | EasyOCR |
+| Backend | Flask |
+| Database | SQLite |
+| Receipts Evaluated | 17 |
+| Overall Accuracy | 96.83% |
+| REST API | Yes |
+| Batch Processing | Yes |
+| Dockerized | Yes |
 
 ## Features
 
@@ -53,59 +91,63 @@ The application combines image preprocessing, OCR, text normalization, intellige
 
 ## System Architecture
 
+text
 Receipt Image
-↓
+      │
+      ▼
 OpenCV Preprocessing
-↓
+      │
+      ▼
 EasyOCR
-↓
-Text Cleaning & Normalization
-↓
+      │
+      ▼
+Text Cleaning
+      │
+      ▼
 Receipt Parser
-↓
+      │
+      ▼
 Field Extraction
-↓
-Database Storage
-↓
-Web Interface / REST API
+      │
+      ▼
+SQLite Database
+      │
+      ▼
+Flask API + Web Interface
+
 
 ## Project Structure
 
+```text
 OCR_Project/
-
+│
 ├── app.py
-
-├── database.py
-
-├── models.py
-
-├── receipt_parser.py
-
-├── text_cleaner.py
-
 ├── evaluate.py
-
-├── batch_ocr.py
-
+├── receipt_parser.py
+├── database.py
+├── models.py
+│
 ├── services/
-
-│ ├── ai_ocr_service.py
-
-│ ├── nlp_service.py
-
-│ └── receipt_service.py
-
 ├── templates/
-
 ├── static/
-
-├── data/
-
 ├── tests/
-
+├── data/
+│
 ├── Dockerfile
+├── requirements-docker.txt
+├── requirements.txt
+└── README.md
+```
 
-└── requirements-docker.txt
+## Sample API Response
+
+json
+{
+  "date": "2026-05-09",
+  "subtotal": "2315.37",
+  "tax": "205.49",
+  "total": "2520.86"
+}
 
 ## API Endpoints
 
@@ -241,12 +283,20 @@ docker run -p 5000:5000 receipt-ocr
 
 ## Future Improvements
 
-* Cloud deployment
-* Multi-language receipt support
-* Receipt classification
-* Expense analytics dashboard
-* Deep learning-based field extraction
-* PDF receipt processing
+- Multi-language OCR support
+- PDF receipt processing
+- Expense categorization
+- Receipt classification using Machine Learning
+- Cloud deployment (AWS / GCP)
+- Analytics dashboard for expense insights
+
+ ## Engineering Challenges Solved
+
+- Handled OCR noise and inconsistent receipt formats.
+- Improved total extraction accuracy using intelligent rule-based parsing.
+- Built benchmark evaluation workflows with ground truth datasets.
+- Implemented batch OCR processing for multiple receipts.
+- Containerized the complete application using Docker.
 
 ## Resume Highlights
 

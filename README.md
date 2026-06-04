@@ -1,4 +1,4 @@
-<img width="1500" height="627" alt="receipt_history" src="https://github.com/user-attachments/assets/467b02dd-0f2d-4509-8cce-506d2782aba1" /># AI Receipt OCR System
+# AI Receipt OCR System
 
 An end-to-end AI-powered Receipt OCR System that extracts structured financial information from receipt images using Computer Vision, OCR, NLP, and a Flask web application.
 
@@ -91,7 +91,7 @@ data/ground_truth.json
 
 ## System Architecture
 
-text
+```text
 Receipt Image
       │
       ▼
@@ -114,6 +114,7 @@ SQLite Database
       │
       ▼
 Flask API + Web Interface
+```
 
 
 ## Project Structure
@@ -222,7 +223,7 @@ containing:
 
 ### Receipt History
 
-(Add Screenshot)
+![Receipt_History](screenshots/receipt_history.png)
 
 ### Swagger Documentation
 
@@ -311,4 +312,4 @@ docker run -p 5000:5000 receipt-ocr
 
 Karan Bhilare
 
-GitHub: YOUR_GITHUB_LINK
+GitHub: github.com/karanbhilare58/OCR_Project

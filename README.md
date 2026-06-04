@@ -1,4 +1,4 @@
-# AI Receipt OCR System
+<img width="1500" height="627" alt="receipt_history" src="https://github.com/user-attachments/assets/467b02dd-0f2d-4509-8cce-506d2782aba1" /># AI Receipt OCR System
 
 An end-to-end AI-powered Receipt OCR System that extracts structured financial information from receipt images using Computer Vision, OCR, NLP, and a Flask web application.
 
@@ -214,11 +214,11 @@ containing:
 
 ### Home Page
 
-(Add Screenshot)
+![Home Page](screenshots/homepage.png)
 
 ### OCR Result Page
 
-(Add Screenshot)
+![Result Page 1](screenshots/result_page1.png) ![Result Page 2](screenshots/result_page2.png)
 
 ### Receipt History
 
@@ -226,12 +226,14 @@ containing:
 
 ### Swagger Documentation
 
-(Add Screenshot)
+![swagger_page1](screenshots/swagger1.png) ![Swagger_page2](screenshots/swagger2.png)
 
 ### Docker Execution
 
-(Add Screenshot)
+![Docker_page1](screenshots/docker1.png) ![Docker_page2](screenshots/docker2.png)
 
+### Evaluation Result
+![evaluation](screenshots/evaluation.png)
 ## Installation
 
 ### Clone Repository

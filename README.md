@@ -1,392 +1,262 @@
-<<<<<<< Updated upstream
-# 🧾 AI Receipt OCR System
-
-First AI/ML project demonstrating an end-to-end OCR pipeline for automated receipt data extraction.
-An end-to-end **Optical Character Recognition (OCR) pipeline** that extracts structured data from receipt images using **OpenCV, Tesseract OCR, and Flask**.
-The system preprocesses receipt images, detects text regions, extracts important information (Date, Subtotal, Tax, Total), calculates OCR confidence, and visualizes the entire processing pipeline through a web interface.
-
-## 🧠 Key Concepts Demonstrated
-
-• Image preprocessing using OpenCV (grayscale, thresholding)  
-• Optical Character Recognition using Tesseract  
-• Text region detection using bounding boxes  
-• Regex-based information extraction from OCR text  
-• Confidence scoring for OCR reliability  
-• End-to-end ML system deployment using Flask
-
----
-
-## 🚀 Demo
-
-Upload a receipt image and the system will:
-
-1. Preprocess the image  
-2. Extract text using OCR  
-3. Detect text regions  
-4. Extract structured data  
-5. Display confidence and results  
-
----
-
-## 🖥️ Application Interface
-
-### Upload Receipt
-Upload a receipt image through the web interface.
-
-### OCR Processing Pipeline
-The system visually shows each step of the OCR pipeline:
-
-• Original Image  
-• Grayscale Conversion  
-• Threshold Processing  
-• OCR Detection (Bounding Boxes)
-
-### Extracted Data
-The system automatically extracts:
-
-• Date  
-• Subtotal  
-• Tax  
-• Total  
-• OCR Confidence Score  
-
----
-
-## 🧠 System Architecture
+# AI Receipt OCR System
 
-Receipt Image  
-↓  
-OpenCV Image Preprocessing  
-↓  
-Grayscale Conversion  
-↓  
-Thresholding  
-↓  
-Tesseract OCR  
-↓  
-Text Cleaning  
-↓  
-Regex Information Extraction  
-↓  
-Confidence Calculation  
-↓  
-Flask Web Visualization  
+An end-to-end AI-powered Receipt OCR System that extracts structured financial information from receipt images using Computer Vision, OCR, NLP, and a Flask web application.
 
----
+## Overview
 
-## 🛠️ Tech Stack
+The system automatically processes receipt images and extracts key financial fields such as:
 
-| Technology | Purpose |
-|------------|---------|
-| Python | Core programming language |
-| OpenCV | Image preprocessing |
-| Tesseract OCR | Text recognition |
-| Flask | Web application backend |
-| Bootstrap | User interface |
-| Pandas | Data handling |
-| Regex | Structured data extraction |
+* Date
+* Subtotal
+* Tax
+* Total Amount
 
----
+The application combines image preprocessing, OCR, text normalization, intelligent receipt parsing, database storage, REST APIs, and evaluation analytics into a production-style pipeline.
 
-## 📂 Project Structure
+## Features
 
-OCR_PROJECT2  
-│  
-├── app.py                # Flask web application  
-├── batch_ocr.py          # Batch OCR processing script  
-├── text_cleaner.py       # OCR text cleaning module  
-├── receipt_parser.py     # Regex data extraction  
-│  
-├── templates  
-│   ├── index.html        # Upload page  
-│   └── result.html       # Result display page  
-│  
-├── static  
-│   ├── original.png  
-│   ├── step_gray.png  
-│   ├── step_thresh.png  
-│└── processed_receipt.png
-|
-├──screenshots
-|    ├── upload_page.png
-|   ├── image_preview.png
-|   ├── ocr_pipeline.png
-|   └── extracted_data.png 
-|
-├── data  
-│   └── receipts          # Sample receipt images  
-│  
-└── results               # OCR output results  
+* EasyOCR-powered text extraction
+* OpenCV image preprocessing
+* Intelligent receipt parsing
+* Date, subtotal, tax, and total extraction
+* Receipt history management
+* SQLite database integration
+* Batch receipt processing
+* REST API support
+* Swagger API documentation
+* Evaluation framework
+* CSV evaluation reporting
+* Docker containerization
 
----
-## 📸 Application Screenshots
+## Tech Stack
 
-### Upload Interface
-![Upload Page](screenshots/upload_page.png)
+### Backend
 
-### Image Preview
-![Image Preview](screenshots/image_preview.png)
+* Python
+* Flask
+* Flask-SQLAlchemy
+* SQLite
 
-### OCR Processing Pipeline
-![OCR Pipeline](screenshots/ocr_pipeline.png)
+### AI / OCR
 
-### Extracted Receipt Data
-![Extracted Data](screenshots/extracted_data.png)
+* EasyOCR
+* OpenCV
+* spaCy
 
-## ⚙️ Installation
+### Documentation
 
-Clone the repository
+* Flasgger (Swagger UI)
 
-    git clone https://github.com/karanbhilare58/OCR_Project2.git
+### Deployment
 
-Navigate to the project folder
+* Docker
 
-    cd OCR_Project2
+## System Architecture
 
-Create virtual environment
+Receipt Image
+↓
+OpenCV Preprocessing
+↓
+EasyOCR
+↓
+Text Cleaning & Normalization
+↓
+Receipt Parser
+↓
+Field Extraction
+↓
+Database Storage
+↓
+Web Interface / REST API
 
-    python -m venv venv
+## Project Structure
 
-Activate environment
+OCR_Project/
 
-    venv\Scripts\activate
+├── app.py
 
-Install dependencies
+├── database.py
 
-    pip install -r requirements.txt
+├── models.py
 
----
+├── receipt_parser.py
 
-## ▶️ Run the Application
+├── text_cleaner.py
 
-Start the Flask server
+├── evaluate.py
 
-    python app.py
+├── batch_ocr.py
 
-Open browser
+├── services/
 
-    http://127.0.0.1:5000
+│ ├── ai_ocr_service.py
 
-Upload a receipt image and view extracted results.
+│ ├── nlp_service.py
 
----
+│ └── receipt_service.py
 
-## 📊 Example Output
+├── templates/
 
-Date: 07/09/20  
-Subtotal: 3899.00  
-Tax: 341.16  
-Total: 4240.16  
-OCR Confidence: 76.53%
+├── static/
 
-The system also displays the OCR processing pipeline showing image preprocessing steps and detected text regions.
+├── data/
 
----
+├── tests/
 
-## ✨ Features
+├── Dockerfile
 
-✔ Interactive web interface  
-✔ End-to-end OCR pipeline  
-✔ Visual preprocessing stages  
-✔ Bounding box text detection  
-✔ Structured data extraction  
-✔ OCR confidence scoring  
+└── requirements-docker.txt
 
----
+## API Endpoints
 
-## 🚧 Future Improvements
+### Process Single Receipt
 
-• Support for multiple receipt formats  
-• Improved text detection using deep learning models (EAST / CRAFT)  
-• Deployment using Docker  
-• API endpoint for receipt processing  
-• Improved receipt parsing using NLP models
+POST
 
-...
-=======
-# 🧾 AI Receipt OCR System
+/api/process_receipt
 
-An end-to-end **Optical Character Recognition (OCR) pipeline** that extracts structured data from receipt images using **OpenCV, Tesseract OCR, and Flask**.
+Accepts a receipt image and returns extracted fields.
 
-The system preprocesses receipt images, detects text regions, extracts important information (Date, Subtotal, Tax, Total), calculates OCR confidence, and visualizes the entire processing pipeline through a web interface.
+### Batch Receipt Processing
 
----
+POST
 
-## 🚀 Demo
+/api/process_batch
 
-Upload a receipt image and the system will:
+Accepts multiple receipt images and processes them together.
 
-1. Preprocess the image  
-2. Extract text using OCR  
-3. Detect text regions  
-4. Extract structured data  
-5. Display confidence and results  
+### Swagger Documentation
 
----
+/apidocs
 
-## 🖥️ Application Interface
+Interactive API documentation generated using Flasgger.
 
-### Upload Receipt
-Upload a receipt image through the web interface.
+## Evaluation Results
 
-### OCR Processing Pipeline
-The system visually shows each step of the OCR pipeline:
+Benchmark Dataset:
 
-• Original Image  
-• Grayscale Conversion  
-• Threshold Processing  
-• OCR Detection (Bounding Boxes)
+* 17 receipt images
+* Multiple receipt formats
+* Realistic OCR noise
 
-### Extracted Data
-The system automatically extracts:
+### Field Accuracy
 
-• Date  
-• Subtotal  
-• Tax  
-• Total  
-• OCR Confidence Score  
+| Field    | Accuracy |
+| -------- | -------- |
+| Date     | 100.00%  |
+| Subtotal | 93.33%   |
+| Tax      | 100.00%  |
+| Total    | 94.12%   |
 
----
+### Overall Accuracy
 
-## 🧠 System Architecture
+96.83%
 
-Receipt Image  
-↓  
-OpenCV Image Preprocessing  
-↓  
-Grayscale Conversion  
-↓  
-Thresholding  
-↓  
-Tesseract OCR  
-↓  
-Text Cleaning  
-↓  
-Regex Information Extraction  
-↓  
-Confidence Calculation  
-↓  
-Flask Web Visualization  
+61 Correct Fields / 63 Total Fields
 
----
+### Evaluation Reporting
 
-## 🛠️ Tech Stack
+The project automatically generates:
 
-| Technology | Purpose |
-|------------|---------|
-| Python | Core programming language |
-| OpenCV | Image preprocessing |
-| Tesseract OCR | Text recognition |
-| Flask | Web application backend |
-| Bootstrap | User interface |
-| Pandas | Data handling |
-| Regex | Structured data extraction |
+evaluation_report.csv
 
----
+containing:
 
-## 📂 Project Structure
+* Receipt Name
+* Field Name
+* Expected Value
+* Extracted Value
+* Pass/Fail Status
 
-OCR_PROJECT2  
-│  
-├── app.py                # Flask web application  
-├── batch_ocr.py          # Batch OCR processing script  
-├── text_cleaner.py       # OCR text cleaning module  
-├── receipt_parser.py     # Regex data extraction  
-│  
-├── templates  
-│   ├── index.html        # Upload page  
-│   └── result.html       # Result display page  
-│  
-├── static  
-│   ├── original.png  
-│   ├── step_gray.png  
-│   ├── step_thresh.png  
-│└── processed_receipt.png
-|
-├──screenshots
-|    ├── upload_page.png
-|   ├── image_preview.png
-|   ├── ocr_pipeline.png
-|   └── extracted_data.png 
-|
-├── data  
-│   └── receipts          # Sample receipt images  
-│  
-└── results               # OCR output results  
+## Screenshots
 
----
-## 📸 Application Screenshots
+### Home Page
 
-### Upload Interface
-![Upload Page](screenshots/upload_page.png)
+(Add Screenshot)
 
-### Image Preview
-![Image Preview](screenshots/image_preview.png)
+### OCR Result Page
 
-### OCR Processing Pipeline
-![OCR Pipeline](screenshots/ocr_pipeline.png)
+(Add Screenshot)
 
-### Extracted Receipt Data
-![Extracted Data](screenshots/extracted_data.png)
+### Receipt History
 
-## ⚙️ Installation
+(Add Screenshot)
 
-Clone the repository
+### Swagger Documentation
 
-    git clone https://github.com/karanbhilare58/OCR_Project2.git
+(Add Screenshot)
 
-Navigate to the project folder
+### Docker Execution
 
-    cd OCR_Project2
+(Add Screenshot)
 
-Create virtual environment
+## Installation
 
-    python -m venv venv
+### Clone Repository
 
-Activate environment
+git clone YOUR_GITHUB_LINK
 
-    venv\Scripts\activate
+cd OCR_Project
 
-Install dependencies
+### Create Virtual Environment
 
-    pip install -r requirements.txt
+python -m venv venv
 
----
+source venv/bin/activate
 
-## ▶️ Run the Application
+### Install Dependencies
 
-Start the Flask server
+pip install -r requirements-docker.txt
 
-    python app.py
+### Run Application
 
-Open browser
+python app.py
 
-    http://127.0.0.1:5000
+Application:
 
-Upload a receipt image and view extracted results.
+http://localhost:5000
 
----
+Swagger:
 
-## 📊 Example Output
+http://localhost:5000/apidocs
 
-Date: 07/09/20  
-Subtotal: 3899.00  
-Tax: 341.16  
-Total: 4240.16  
-OCR Confidence: 76.53%
+## Docker
 
-The system also displays the OCR processing pipeline showing image preprocessing steps and detected text regions.
+### Build Image
 
----
+docker build -t receipt-ocr .
 
-## ✨ Features
+### Run Container
 
-✔ Interactive web interface  
-✔ End-to-end OCR pipeline  
-✔ Visual preprocessing stages  
-✔ Bounding box text detection  
-✔ Structured data extraction  
-✔ OCR confidence scoring  
+docker run -p 5000:5000 receipt-ocr
 
----
->>>>>>> Stashed changes
+## Challenges Solved
+
+* OCR text cleaning and normalization
+* Receipt format variability
+* Total amount extraction accuracy
+* Batch receipt processing
+* Evaluation and benchmarking
+* Docker containerization
+
+## Future Improvements
+
+* Cloud deployment
+* Multi-language receipt support
+* Receipt classification
+* Expense analytics dashboard
+* Deep learning-based field extraction
+* PDF receipt processing
+
+## Resume Highlights
+
+* Built an end-to-end OCR system using EasyOCR, OpenCV, Flask, and SQLite.
+* Developed REST APIs, batch processing, database persistence, and evaluation analytics.
+* Achieved 96.83% field extraction accuracy on a custom benchmark dataset.
+* Containerized the application using Docker for reproducible deployment.
+
+## Author
+
+Karan Bhilare
+
+GitHub: YOUR_GITHUB_LINK
